@@ -1,24 +1,24 @@
-class TrabajoPractico {
+import { CANTIDAD_DE_FILAS_A_SIMULAR } from './components/SimulacionFormulario';
 
+class TrabajoPractico {
     constructor(stockInicial, cantidadFilasASimular) {
         this.STOCK_INICIAL = stockInicial;
         this.CANTIDAD_DE_FILAS_A_SIMULAR = cantidadFilasASimular;
         this.resultados = [];
-        this.cantidadLlegadas = 0; // Contador de llegadas
+        this.cantidadLlegadasClientes = 0; // Contador para la cantidad total de llegadas de clientes
+        this.porcentajeClientesTristes = 0;
     }
   
     comenzarEjecucion() {
-        
         const datos = {
-            
             colaEventos: [],
             empleadosLibres: 2,
             colaClientes: [],
-            stock: this.STOCK_INICIAL, // Utilizar el valor inicial del stock ingresado
+            stock: this.STOCK_INICIAL,
             clientes: 0,
             clientesTristes: 0,
         };
-        
+      
         this.inicializarEventos(datos);
   
         for (let fila = 0; fila < this.CANTIDAD_DE_FILAS_A_SIMULAR; fila++) {
@@ -36,17 +36,21 @@ class TrabajoPractico {
                     evento: evento.constructor.name,
                     nroCliente: evento.nroCliente,
                 })),
-                cantidadLlegadas: this.cantidadLlegadas, // Agregar la cantidad de llegadas
+                clientesTristes: datos.clientesTristes,
+                cantidadLlegadasClientes: this.cantidadLlegadasClientes, // Agregamos la cantidad total de llegadas de clientes en cada iteración
             };
   
             this.resultados.push(filaDatos);
             eventoInminente.ocurreEvento(datos);
 
-            // Incrementar el contador de llegadas si es una llegada de cliente
-            if (eventoInminente instanceof LlegadaCliente) {
-                this.cantidadLlegadas++;
+            // Incrementar el contador de llegadas de clientes
+            if (eventoInminente.constructor.name === "LlegadaCliente") {
+                this.cantidadLlegadasClientes++;
             }
         }
+
+        // Calcular el porcentaje de clientes tristes al finalizar la simulación
+        this.porcentajeClientesTristes = (datos.clientesTristes / this.cantidadLlegadasClientes) * 100;
     }
   
     encontrarEventoMasProximo(datos) {

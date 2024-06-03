@@ -1,7 +1,7 @@
 import React from 'react';
 import { Table, Container } from 'react-bootstrap';
 
-const SimulacionTabla = ({ data }) => {
+const SimulacionTabla = ({ data,porcentajeClientesTristes }) => {
   return (
     <Container>
       <Table striped bordered hover>
@@ -40,7 +40,10 @@ const SimulacionTabla = ({ data }) => {
           ))}
         </tbody>
       </Table>
+      {/* Mostrar el porcentaje de clientes tristes al finalizar la simulación */}
+      <p>Porcentaje de clientes tristes: {porcentajeClientesTristes.toFixed(2)}%</p>
     </Container>
+   
   );
 };
 
