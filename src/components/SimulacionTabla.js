@@ -14,7 +14,8 @@ const SimulacionTabla = ({ data }) => {
             <th>Empleados Libres</th>
             <th>Cola Clientes</th>
             <th>Eventos en Cola</th>
-            <th>Abandonos</th> {/* Nueva columna para la cantidad de clientes tristes */}
+            <th>Cantidad Llegadas</th> {/* Nueva columna para la cantidad de llegadas */}
+            <th>Abandonos</th> 
           </tr>
         </thead>
         <tbody>
@@ -33,6 +34,7 @@ const SimulacionTabla = ({ data }) => {
                   </div>
                 ))}
               </td>
+              <td>{fila.cantidadLlegadas}</td> {/* Mostrar la cantidad de llegadas en esta iteración */}
               <td>{fila.clientesTristes}</td> {/* Mostrar la cantidad de clientes tristes en esta iteración */}
             </tr>
           ))}
