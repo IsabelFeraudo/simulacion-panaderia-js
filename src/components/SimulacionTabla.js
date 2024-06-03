@@ -7,6 +7,7 @@ const SimulacionTabla = ({ data,porcentajeClientesTristes }) => {
       <Table striped bordered hover>
         <thead>
           <tr>
+            <th>Fila</th>
             <th>Tiempo</th>
             <th>Evento</th>
             <th>Nro Cliente</th>
@@ -21,6 +22,7 @@ const SimulacionTabla = ({ data,porcentajeClientesTristes }) => {
         <tbody>
           {data.map((fila, index) => (
             <tr key={index}>
+              <td>{fila.nroFila}</td>
               <td>{fila.tiempo}</td>
               <td>{fila.evento}</td>
               <td>{fila.nroCliente}</td>

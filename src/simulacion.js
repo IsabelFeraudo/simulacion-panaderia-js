@@ -21,36 +21,29 @@ class TrabajoPractico {
       
         this.inicializarEventos(datos);
   
-        for (let fila = 0; fila < this.CANTIDAD_DE_FILAS_A_SIMULAR; fila++) {
-            const eventoInminente = this.encontrarEventoMasProximo(datos);
+      for (let fila = 1; fila < this.CANTIDAD_DE_FILAS_A_SIMULAR; fila++) {
+        const eventoInminente = this.encontrarEventoMasProximo(datos)
   
-            const filaDatos = {
-                tiempo: eventoInminente.tiempo,
-                evento: eventoInminente.constructor.name,
-                nroCliente: eventoInminente.nroCliente,
-                stock: datos.stock,
-                empleadosLibres: datos.empleadosLibres,
-                colaClientes: [...datos.colaClientes],
-                eventosCola: datos.colaEventos.map(evento => ({
-                    tiempo: evento.tiempo,
-                    evento: evento.constructor.name,
-                    nroCliente: evento.nroCliente,
-                })),
-                clientesTristes: datos.clientesTristes,
-                cantidadLlegadasClientes: this.cantidadLlegadasClientes, // Agregamos la cantidad total de llegadas de clientes en cada iteración
-            };
+        eventoInminente.ocurreEvento(datos)
   
-            this.resultados.push(filaDatos);
-            eventoInminente.ocurreEvento(datos);
-
-            // Incrementar el contador de llegadas de clientes
-            if (eventoInminente.constructor.name === "LlegadaCliente") {
-                this.cantidadLlegadasClientes++;
-            }
+        const filaDatos = {
+          tiempo: eventoInminente.tiempo,
+          evento: eventoInminente.constructor.name,
+          nroCliente: eventoInminente.nroCliente,
+          stock: datos.stock,
+          empleadosLibres: datos.empleadosLibres,
+          colaClientes: [...datos.colaClientes],
+          eventosCola: datos.colaEventos.map(evento => ({
+            tiempo: evento.tiempo,
+            evento: evento.constructor.name,
+            nroCliente: evento.nroCliente,
+          })),
         }
-
-        // Calcular el porcentaje de clientes tristes al finalizar la simulación
-        this.porcentajeClientesTristes = (datos.clientesTristes / this.cantidadLlegadasClientes) * 100;
+  
+        if (fila >= this.FILA_A_SIMULAR_DESDE && fila < this.FILA_A_SIMULAR_DESDE + this.CANTIDAD_FILAS_A_MOSTRAR) {
+          this.resultados.push({ ...filaDatos, nroFila: fila })
+        }
+      }
     }
   
     encontrarEventoMasProximo(datos) {
