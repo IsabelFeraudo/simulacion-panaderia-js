@@ -1,7 +1,7 @@
-import React from 'react';
-import { Table, Container } from 'react-bootstrap';
+import React from "react";
+import { Table, Container } from "react-bootstrap";
 
-const SimulacionTabla = ({ data,porcentajeClientesTristes }) => {
+const SimulacionTabla = ({ data, porcentajeClientesTristes }) => {
   return (
     <Container>
       <Table striped bordered hover>
@@ -15,8 +15,9 @@ const SimulacionTabla = ({ data,porcentajeClientesTristes }) => {
             <th>Empleados Libres</th>
             <th>Cola Clientes</th>
             <th>Eventos en Cola</th>
-            <th>Cantidad Llegadas</th> {/* Nueva columna para la cantidad de llegadas */}
-            <th>Abandonos</th> 
+            <th>Cantidad Llegadas</th>{" "}
+            {/* Nueva columna para la cantidad de llegadas */}
+            <th>Abandonos</th>
           </tr>
         </thead>
         <tbody>
@@ -28,24 +29,28 @@ const SimulacionTabla = ({ data,porcentajeClientesTristes }) => {
               <td>{fila.nroCliente}</td>
               <td>{fila.stock}</td>
               <td>{fila.empleadosLibres}</td>
-              <td>{fila.colaClientes.join(', ')}</td>
+              <td>{fila.colaClientes.join(", ")}</td>
               <td>
                 {fila.eventosCola.map((evento, idx) => (
                   <div key={idx}>
-                    {evento.evento} (Tiempo: {evento.tiempo}, Cliente: {evento.nroCliente})
+                    {evento.evento} (Tiempo: {evento.tiempo}, Cliente:{" "}
+                    {evento.nroCliente})
                   </div>
                 ))}
               </td>
-              <td>{fila.cantidadLlegadas}</td> {/* Mostrar la cantidad de llegadas en esta iteración */}
-              <td>{fila.clientesTristes}</td> {/* Mostrar la cantidad de clientes tristes en esta iteración */}
+              <td>{fila.cantidadLlegadasClientes}</td>{" "}
+              {/* Mostrar la cantidad de llegadas en esta iteración */}
+              <td>{fila.clientesTristes}</td>{" "}
+              {/* Mostrar la cantidad de clientes tristes en esta iteración */}
             </tr>
           ))}
         </tbody>
       </Table>
       {/* Mostrar el porcentaje de clientes tristes al finalizar la simulación */}
-      <p>Porcentaje de clientes tristes: {porcentajeClientesTristes.toFixed(2)}%</p>
+      <p>
+        Porcentaje de clientes tristes: {porcentajeClientesTristes.toFixed(2)}%
+      </p>
     </Container>
-   
   );
 };
 

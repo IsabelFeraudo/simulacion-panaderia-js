@@ -19,33 +19,35 @@ class TrabajoPractico {
       clientesTristes: 0,
     }
 
-    this.inicializarEventos(datos)
+    this.inicializarEventos(datos);
 
-    for (let fila = 1; fila < this.CANTIDAD_DE_FILAS_A_SIMULAR; fila++) {
-      const eventoInminente = this.encontrarEventoMasProximo(datos)
+    for (let fila = 0; fila < this.CANTIDAD_DE_FILAS_A_SIMULAR; fila++) {
+        const eventoInminente = this.encontrarEventoMasProximo(datos);
 
-      eventoInminente.ocurreEvento(datos)
+        const filaDatos = {
+            tiempo: eventoInminente.tiempo,
+            evento: eventoInminente.constructor.name,
+            nroCliente: eventoInminente.nroCliente,
+            stock: datos.stock,
+            empleadosLibres: datos.empleadosLibres,
+            colaClientes: [...datos.colaClientes],
+            eventosCola: datos.colaEventos.map(evento => ({
+                tiempo: evento.tiempo,
+                evento: evento.constructor.name,
+                nroCliente: evento.nroCliente,
+            })),
+            cantidadLlegadasClientes: this.cantidadLlegadasClientes, // Agregar la cantidad de llegadas
+        };
 
-      const filaDatos = {
-        tiempo: eventoInminente.tiempo,
-        evento: eventoInminente.constructor.name,
-        nroCliente: eventoInminente.nroCliente,
-        stock: datos.stock,
-        empleadosLibres: datos.empleadosLibres,
-        colaClientes: [...datos.colaClientes],
-        eventosCola: datos.colaEventos.map(evento => ({
-          tiempo: evento.tiempo,
-          evento: evento.constructor.name,
-          nroCliente: evento.nroCliente,
-        })),
-      }
+        this.resultados.push(filaDatos);
+        eventoInminente.ocurreEvento(datos);
 
-      if (fila >= this.FILA_A_SIMULAR_DESDE && fila < this.FILA_A_SIMULAR_DESDE + this.CANTIDAD_FILAS_A_MOSTRAR) {
-        this.resultados.push({ ...filaDatos, nroFila: fila })
-      }
+        // Incrementar el contador de llegadas si es una llegada de cliente
+        if (eventoInminente instanceof LlegadaCliente) {
+            this.cantidadLlegadasClientes++;
+        }
     }
-  }
-
+}
   encontrarEventoMasProximo(datos) {
     const eventoEncontrado = datos.colaEventos.reduce(
       (eventoMinimo, evento) => (evento.tiempo < eventoMinimo.tiempo ? evento : eventoMinimo),
@@ -81,6 +83,7 @@ class LlegadaCliente {
   ocurreEvento(datos) {
     datos.clientes += 1
     datos.colaEventos.push(new LlegadaCliente(this.tiempo, datos.clientes + 1))
+    datos.cantidadLlegadasClientes += 1;
 
     if (datos.stock === 0) {
       datos.clientesTristes += 1
