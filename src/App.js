@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import SimulacionTabla from './components/SimulacionTabla'
 import SimulacionFormulario from './components/SimulacionFormulario'
 import TrabajoPractico from './simulacion'
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 function App() {
   const [datos, setDatos] = useState([])
