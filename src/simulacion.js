@@ -41,9 +41,43 @@ class Lugar {
 
 class TrabajoPractico {
   mostrarDatos(evento, datos) {
-    const llegadaDeAuto =
+    const utilitariosParcialmenteLibres = datos.lugaresDeEstacionamiento.filter(
+      lugar => lugar.tamano === 'utilitario' && lugar.ocupados === 1
+    ).length
+    const utilitariosLibres = datos.lugaresDeEstacionamiento.filter(
+      lugar => lugar.tamano === 'utilitario' && lugar.ocupados === 0
+    ).length
+    const utilitariosOcupados = datos.lugaresDeEstacionamiento.filter(
+      lugar => lugar.tamano === 'utilitario' && lugar.ocupados === 2
+    ).length
+    const grandesLibres = datos.lugaresDeEstacionamiento.filter(
+      lugar => lugar.tamano === 'grande' && lugar.ocupados === 0
+    ).length
+    const grandesOcupados = datos.lugaresDeEstacionamiento.filter(
+      lugar => lugar.tamano === 'grande' && lugar.ocupados === 1
+    ).length
+    const pequeñosLibres = datos.lugaresDeEstacionamiento.filter(
+      lugar => lugar.tamano === 'pequeño' && lugar.ocupados === 0
+    ).length
+    const pequeñosOcupados = datos.lugaresDeEstacionamiento.filter(
+      lugar => lugar.tamano === 'pequeño' && lugar.ocupados === 1
+    ).length
+    const autos = datos.autosIngresados.map(auto => {
+      return { nro: auto.nro, estado: auto.estado }
+    })
+    const filaCaja = datos.filaCaja.map(auto => {
+      return { nro: auto.nro }
+    })
 
-    console.log(`${evento.contructor.name} - t: ${evento.tiempoDeOcurrencia} - `)
+    console.log(
+      `t: ${evento.tiempoDeOcurrencia} - Proximos Eventos: ${JSON.stringify(
+        datos.colaEventos
+      )} - Autos Ingresados: ${JSON.stringify(autos)} - Caja Ocupada: ${
+        datos.cajaOcupada
+      } - Fila en Caja: ${JSON.stringify(
+        filaCaja
+      )} - Lugares Utilitarios Parcialmente Libres: ${utilitariosParcialmenteLibres} - Lugares Utilitarios Libres: ${utilitariosLibres} - Lugares Utilitarios Ocupados: ${utilitariosOcupados} - Lugares Grandes Libres: ${grandesLibres} - Lugares Grandes Ocupados: ${grandesOcupados} - Lugares Pequeños Libres: ${pequeñosLibres} - Lugares Pequeños Ocupados: ${pequeñosOcupados}`
+    )
   }
 
   extraerEventoProximo(datos) {
@@ -95,7 +129,7 @@ class TrabajoPractico {
 
       datos.tiempo = eventoProximo.tiempoDeOcurrencia
 
-      console.log(datos)
+      this.mostrarDatos(eventoProximo, datos)
     }
   }
 }
@@ -114,7 +148,8 @@ class EventoLlegadaAuto {
   constructor(tiempoActual) {
     // constructor es cuando creamos el evento
     this.randomTiempo = Math.random()
-    this.tiempoDeOcurrencia = tiempoActual + 12 + this.randomTiempo * (14 - 12)
+    this.tiempoEntreLlegadas = 12 + this.randomTiempo * (14 - 12)
+    this.tiempoDeOcurrencia = tiempoActual + this.tiempoEntreLlegadas
   }
 
   ocurreEvento(datos) {
@@ -149,23 +184,28 @@ class EventoLlegadaAuto {
     }
 
     if (tamano == 'pequeño') {
+      let encontroLugar = false
+
       for (let i = 0; i < datos.lugaresDeEstacionamiento.length; i++) {
         const lugarEstacionamiento = datos.lugaresDeEstacionamiento[i]
 
         if (lugarEstacionamiento.tamano === 'pequeño' && lugarEstacionamiento.ocupados === 0) {
           lugarEstacionamiento.ocupados += 1
           autoQueLlega.lugar = lugarEstacionamiento
+          encontroLugar = true
           break
         }
       }
 
-      for (let i = 0; i < datos.lugaresDeEstacionamiento.length; i++) {
-        const lugarEstacionamiento = datos.lugaresDeEstacionamiento[i]
+      if (!encontroLugar) {
+        for (let i = 0; i < datos.lugaresDeEstacionamiento.length; i++) {
+          const lugarEstacionamiento = datos.lugaresDeEstacionamiento[i]
 
-        if (lugarEstacionamiento.tamano === 'utilitario' && lugarEstacionamiento.ocupados < 2) {
-          lugarEstacionamiento.ocupados += 1
-          autoQueLlega.lugar = lugarEstacionamiento
-          break
+          if (lugarEstacionamiento.tamano === 'utilitario' && lugarEstacionamiento.ocupados < 2) {
+            lugarEstacionamiento.ocupados += 1
+            autoQueLlega.lugar = lugarEstacionamiento
+            break
+          }
         }
       }
     }
