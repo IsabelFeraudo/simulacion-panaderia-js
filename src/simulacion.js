@@ -68,16 +68,20 @@ class TrabajoPractico {
     const filaCaja = datos.filaCaja.map(auto => {
       return { nro: auto.nro }
     })
+    const colaEventos = datos.colaEventos.map(evento => {
+      return { nombre: evento.constructor.name, tiempo: evento.tiempoDeOcurrencia }
+    })
 
     console.log(
-      `t: ${evento.tiempoDeOcurrencia} - Proximos Eventos: ${JSON.stringify(
-        datos.colaEventos
-      )} - Autos Ingresados: ${JSON.stringify(autos)} - Caja Ocupada: ${
+      `${evento.constructor.name} - t: ${evento.tiempoDeOcurrencia} \nProximos Eventos: ${JSON.stringify(
+        colaEventos
+      )} \nAutos Ingresados: ${JSON.stringify(autos)} \nCaja Ocupada: ${
         datos.cajaOcupada
       } - Fila en Caja: ${JSON.stringify(
         filaCaja
-      )} - Lugares Utilitarios Parcialmente Libres: ${utilitariosParcialmenteLibres} - Lugares Utilitarios Libres: ${utilitariosLibres} - Lugares Utilitarios Ocupados: ${utilitariosOcupados} - Lugares Grandes Libres: ${grandesLibres} - Lugares Grandes Ocupados: ${grandesOcupados} - Lugares Pequeños Libres: ${pequeñosLibres} - Lugares Pequeños Ocupados: ${pequeñosOcupados}`
+      )}\nLugares Utilitarios Parcialmente Libres: ${utilitariosParcialmenteLibres} - Lugares Utilitarios Libres: ${utilitariosLibres} - Lugares Utilitarios Ocupados: ${utilitariosOcupados} - Lugares Grandes Libres: ${grandesLibres} - Lugares Grandes Ocupados: ${grandesOcupados} - Lugares Pequeños Libres: ${pequeñosLibres} - Lugares Pequeños Ocupados: ${pequeñosOcupados}`
     )
+    console.log()
   }
 
   extraerEventoProximo(datos) {
